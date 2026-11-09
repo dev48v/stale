@@ -315,7 +315,7 @@ def check_anchor(note: Note, line: int, target: str, resolved: str,
     table = anchor_table(dest.heading_texts, anchors)
     if frag in table:
         return Finding(note.path, line, "anchor", "#" + frag, False,
-                       "resolved", "matches heading " + repr(table[frag]))
+                       "resolved", "matches heading '" + table[frag] + "'")
     shown = ", ".join(sorted(table)[:3]) or "(none)"
     return Finding(note.path, line, "anchor", "#" + frag, True,
                    "anchor-missing",
@@ -376,7 +376,7 @@ def check_quote(note: Note, line: int, src: str, start: int, end: int,
         k += 1
     if k < min(len(want_lines), len(body)):
         sa, sb = _window(want_lines[k], body[k])
-        detail = "line %d: source %r, note %r" % (start + k, sa, sb)
+        detail = "line %d: source '%s', note '%s'" % (start + k, sa, sb)
     else:
         detail = "source has %d lines, note has %d" % (len(want_lines), len(body))
     return Finding(note.path, line, "quote", ref, True, "content-drifted",
@@ -560,7 +560,7 @@ def main(argv=None) -> int:
             "causes": [{"cause": c, "count": len(fs)} for c, fs in rep.causes()],
             "findings": [f.__dict__ for f in (rep.findings if args.all else rep.stale)],
         }, indent=2, sort_keys=True))
-        return 0
+        return 2 if rep.stale else 0
 
     print("case %s  anchors %s  quote %s" % (rep.case, rep.anchors, rep.quote))
     print("-" * 78)
