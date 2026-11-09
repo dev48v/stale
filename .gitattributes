@@ -1,0 +1,3 @@
+# stale compares file contents; keep the corpus LF everywhere so a quote
+# that matches on one machine matches on every other.
+* text=auto eol=lf
